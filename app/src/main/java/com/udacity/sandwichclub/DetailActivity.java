@@ -79,7 +79,7 @@ public class DetailActivity extends AppCompatActivity {
             akaNames = akaNames.replace("[", "");
             akaNames = akaNames.replace("]", "");
         }
-        
+
         alsoKnownAsView.setText(akaNames);
         descriptionView.setText(sandwich.getDescription());
         originView.setText(sandwich.getPlaceOfOrigin());
