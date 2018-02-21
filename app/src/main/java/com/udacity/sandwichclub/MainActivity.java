@@ -1,38 +1,43 @@
 package com.udacity.sandwichclub;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
+import com.udacity.sandwichclub.adapters.SandwichDetailAdapter;
+
+import java.util.Arrays;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
+
+    @BindView(R.id.sandwiches_listview)
+    RecyclerView sandwichesRecyclerView;
+
+    SandwichDetailAdapter sandwichDetailAdapter;
+    LinearLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ButterKnife.bind(this);
+
         String[] sandwiches = getResources().getStringArray(R.array.sandwich_names);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, sandwiches);
+        List<String> sandwichList = Arrays.asList(sandwiches);
 
-        // Simplification: Using a ListView instead of a RecyclerView
-        ListView listView = findViewById(R.id.sandwiches_listview);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                launchDetailActivity(position);
-            }
-        });
-    }
+        sandwichDetailAdapter = new SandwichDetailAdapter(this, sandwichList);
 
-    private void launchDetailActivity(int position) {
-        Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra(DetailActivity.EXTRA_POSITION, position);
-        startActivity(intent);
+        layoutManager = new LinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false);
+
+        sandwichesRecyclerView.setLayoutManager(layoutManager);
+        sandwichesRecyclerView.setAdapter(sandwichDetailAdapter);
+
     }
 }
